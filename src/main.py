@@ -1,13 +1,13 @@
+import csv
+import time
+import json
 import influxdb
 import warnings
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
-import json
-import csv
-import datetime
-import time
 import requests
-import urllib.request
+import datetime
 import configparser
+import urllib.request
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 
 devices_online = []
@@ -97,7 +97,6 @@ class update_sensor:
         return device_id
             
 
-
     def last_seen(self, deveui, time_now):
         '''
         Calculate time elapsed from last received package.
@@ -166,6 +165,8 @@ def main():
     for deveui in response:
         new_update = update_sensor(deveui[0])
         new_update.sensor_info(deveui[0], curr_time)
+    print(updated[468])
+    print(updated[-1])
         
 
 main()
