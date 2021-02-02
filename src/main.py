@@ -165,8 +165,6 @@ def main():
     for deveui in response:
         new_update = update_sensor(deveui[0])
         new_update.sensor_info(deveui[0], curr_time)
-    print(updated[468])
-    print(updated[-1])
         
 
 main()
