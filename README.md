@@ -7,7 +7,9 @@ Following object for each deveui
 {'_id': 'deveui', 'update': {'status': 'status'}}
 
 Where
--deveui in all caps, no dashes("-").
+
+-deveui: in format "A81758FFFE041FEC"
+
 -status: "online"/"offline"
 
 ### License
