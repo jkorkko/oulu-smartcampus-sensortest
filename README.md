@@ -4,11 +4,11 @@ Check and update the status of each sensor in operation. Forward infromation to 
 ### Output
 Following object for each deveui
 
-{'_id': '<deveui>', 'update': {'status': '<status>'}}
+{'_id': 'deveui', 'update': {'status': 'status'}}
 
 Where
-- deveui format: "A81758FFFE031010"
-- status: "offline"/"online"
+-deveui in all caps, no dashes("-").
+-status: "online"/"offline"
 
 ### License
 Copyright 2020 Jeremias Körkkö under the MIT license
