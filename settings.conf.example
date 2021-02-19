@@ -1,0 +1,15 @@
+[info]
+user=
+pass=
+host=smartcampus-influx.oulu.fi
+db_default=dev
+
+[HTTP]
+port=443
+
+[URL]
+all=https://smartcampus.oulu.fi/static/static-sensors/all.csv
+elt=https://smartcampus.oulu.fi/static/static-sensors/elt-2-hp.csv
+
+[Query]
+deveuis=SELECT "deveui" FROM "dev"."autogen"."mqtt_consumer" WHERE time > now() - 2h AND "topic"='cwc/LoRaWAN_GW1/uplink'
