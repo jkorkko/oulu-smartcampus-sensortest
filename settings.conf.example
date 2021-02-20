@@ -1,11 +1,13 @@
-[info]
+[InfluxDb]
 user=
 pass=
 host=smartcampus-influx.oulu.fi
 db_default=dev
-
-[HTTP]
 port=443
+
+[SmartCampusApi]
+url=https://smartcampus.oulu.fi/manage/api
+apikey=
 
 [URL]
 all=https://smartcampus.oulu.fi/static/static-sensors/all.csv
