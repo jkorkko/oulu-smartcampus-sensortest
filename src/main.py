@@ -23,18 +23,16 @@ online_query = config.get("Query", "deveuis")
 
 def check_devices():
     '''
-    Fetch device devices seen in the last 2 hours.
+    Fetch devices seen in the last 2 hours.
     '''
     seen = []
     warnings.simplefilter('ignore',InsecureRequestWarning)
     raw_data = CLIENT.query(online_query)
     devices_online = list(raw_data.get_points())
-    packages = len(devices_online) - 1
-    i = 0
-    while i <= packages:
-        deveui = devices_online[i]["deveui"].replace("-", "").upper()
-        seen.append(deveui)
-        i += 1
+    for device in devices_online:
+        deveui = device["deveui"].replace("-", "").upper()
+        if deveui not in seen:
+            seen.append(deveui)
     return seen
 
 
@@ -66,6 +64,5 @@ def main():
     for deveui in response:
         updated = status(deveui[0], seen)
         objects.append(updated)
-
 
 main()
