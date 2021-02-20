@@ -35,6 +35,22 @@ def check_devices():
             seen.append(deveui)
     return seen
 
+def valid_deveuis():
+    '''
+    Return a list of all devices we have
+
+    Fetches static-sensors/all.csv or other configured .csv using http
+    '''
+    deveuis = []
+    with requests.Session() as sensors:
+        response = sensors.get(csv_url)
+        content = response.content.decode('utf-8')
+        reader = csv.reader(content.splitlines(), delimiter=',')
+        deveuis = list(reader)
+    deveuis.pop(0)
+    deveuis = [line[0] for line in deveuis]
+    return deveuis
+
 
 def status(deveui, seen):
     '''
@@ -53,16 +69,10 @@ def status(deveui, seen):
 def main():
     objects = []
     seen = check_devices()
-    #list of all valid deveuis
-    with requests.Session() as sensors:
-        response = sensors.get(csv_url)
-        response = response.content.decode('utf-8')
-        response = csv.reader(response.splitlines(), delimiter=',')
-        response = list(response)
-        response.pop(0)
-    #Create update object for each device
-    for deveui in response:
-        updated = status(deveui[0], seen)
+    valid = valid_deveuis()
+    # Create update object for each device
+    for deveui in valid:
+        updated = status(deveui, seen)
         objects.append(updated)
 
 main()
