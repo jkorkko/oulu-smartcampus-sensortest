@@ -4,6 +4,7 @@ pass=
 host=smartcampus-influx.oulu.fi
 db_default=dev
 port=443
+ssl=true
 
 [SmartCampusApi]
 url=https://smartcampus.oulu.fi/manage/api

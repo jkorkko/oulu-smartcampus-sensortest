@@ -17,7 +17,8 @@ DB_PASS = config.get("InfluxDb", "pass")
 DB_HOST = config.get("InfluxDb", "host")
 DB_DEFAULT = config.get("InfluxDb", "db_default")
 DB_PORT = config.get("InfluxDb", "port")
-CLIENT = influxdb.InfluxDBClient(DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_DEFAULT)
+DB_SSL = config.get("InfluxDb", "SSL").lower() == "true"
+CLIENT = influxdb.InfluxDBClient(DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_DEFAULT, DB_SSL, DB_SSL)
 
 SC_ENDPOINT = config.get("SmartCampusApi", "url").rstrip("/")
 # Optional ApiKey obtained from the api. If key is None, skip authenticated requests.
