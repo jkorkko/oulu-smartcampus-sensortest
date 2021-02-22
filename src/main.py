@@ -97,6 +97,7 @@ def check_devices():
             seen.append(deveui)
     return seen
 
+
 def valid_deveuis():
     '''
     Return a list of all devices we have.
@@ -114,27 +115,43 @@ def valid_deveuis():
     return deveuis
 
 
-def status(deveui, seen):
+def status(device, seen):
     '''
-    Check if sensor has been seen in the last 2h.
+    Check status and update it if needed.
     '''
-    update_status = {}
-    update_status["_id"] = deveui
-    update_status["update"] = {}
-    if deveui in seen:
+    if device["deviceId"] in seen:
         status = "online"
     else:
         status = "offline"
-    update_status["update"]["status"]  = status
-    return update_status
+
+    if status == device["status"]:
+        # No change in status, no need for update
+        return        
+    else:
+        # Update status
+        return #smart_campus_update(device["_id"], status)
+
 
 def main():
-    objects = []
     seen = check_devices()
     valid = valid_deveuis()
-    # Create update object for each device
-    for deveui in valid:
-        updated = status(deveui, seen)
-        objects.append(updated)
+    device_info = smart_campus_devices()
+
+    for device in device_info:
+        if device["deviceId"] in valid:
+
+            if device["status"] == "maintenance":
+                # Ignore if device is not installed
+                continue
+            elif device["status"] == "planned":
+                # Ignore if device is not installed
+                continue
+            else:
+                status(device, seen)
+
+        else:
+            # Unknown DevEUI
+            pass
+
 
 main()
