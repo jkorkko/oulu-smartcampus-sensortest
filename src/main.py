@@ -20,6 +20,8 @@ DB_PORT = config.get("InfluxDb", "port")
 DB_SSL = config.get("InfluxDb", "SSL").lower() == "true"
 CLIENT = influxdb.InfluxDBClient(DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_DEFAULT, DB_SSL, DB_SSL)
 
+test_sensor = config.get("Query", "test_sensor") or None
+
 SC_ENDPOINT = config.get("SmartCampusApi", "url").rstrip("/")
 # Optional ApiKey obtained from the api. If key is None, skip authenticated requests.
 SC_APIKEY = config.get("SmartCampusApi", "apikey") or None
@@ -129,7 +131,7 @@ def status(device, seen):
         return        
     else:
         # Update status
-        return #smart_campus_update(device["_id"], status)
+        return smart_campus_update(device["_id"], status)
 
 
 def main():
@@ -139,18 +141,21 @@ def main():
 
     for device in device_info:
         if device["deviceId"] in valid:
-
+            # Ignore if device is not installed
             if device["status"] == "maintenance":
-                # Ignore if device is not installed
                 continue
             elif device["status"] == "planned":
-                # Ignore if device is not installed
                 continue
+
+            elif test_sensor:
+                # Update only one sensor, if one is set in settings
+                if device["deviceId"] == test_sensor:
+                    status(device, seen)
             else:
                 status(device, seen)
-
+        
         else:
-            # Unknown DevEUI
+            # Unknown sensor ID value
             pass
 
 

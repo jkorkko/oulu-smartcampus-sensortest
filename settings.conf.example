@@ -15,4 +15,5 @@ all=https://smartcampus.oulu.fi/static/static-sensors/all.csv
 elt=https://smartcampus.oulu.fi/static/static-sensors/elt-2-hp.csv
 
 [Query]
-deveuis=SELECT "deveui" FROM "dev"."autogen"."mqtt_consumer" WHERE time > now() - 2h AND "topic"='cwc/LoRaWAN_GW1/uplink'
+deveuis = SELECT deveui FROM mqtt_consumer WHERE "topic" = 'cwc/elsys/parsed' AND time >= now() - 2h
+test_sensor = A81758FFFE031046
