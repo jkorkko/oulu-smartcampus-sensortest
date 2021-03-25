@@ -139,6 +139,11 @@ def main():
     valid = valid_deveuis()
     device_info = smart_campus_devices()
 
+    # Verify test_sensor
+    if test_sensor:
+        if test_sensor not in valid:
+            raise RuntimeError("Unknown sensor id value given to test device")
+
     for device in device_info:
         if device["deviceId"] in valid:
             # Ignore if device is not installed
@@ -148,9 +153,11 @@ def main():
                 continue
 
             elif test_sensor:
-                # Update only one sensor, if one is set in settings
+                # Update only one sensor for testing
+                # purposes, if one is set in the settings
                 if device["deviceId"] == test_sensor:
                     status(device, seen)
+                    break
             else:
                 status(device, seen)
         
