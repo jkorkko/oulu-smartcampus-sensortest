@@ -1,4 +1,5 @@
 import csv
+import time
 import warnings
 
 import configparser
@@ -65,6 +66,7 @@ def smart_campus_update(_id, status):
     Raises:
         RuntimeError: Device couldn't be updated.
     '''
+    time.sleep(0.2)
     if not SC_APIKEY:
         return
 
@@ -83,6 +85,7 @@ def smart_campus_update(_id, status):
     if "success" not in response_json or not response_json["success"]:
         message = response_json["msg"] if "msg" in response_json else ""
         raise RuntimeError(F"Device update failed: {message}")
+
 
 
 def check_devices():
@@ -125,12 +128,14 @@ def status(device, seen):
         status = "online"
     else:
         status = "offline"
+        print(device["deviceId"], "is offline")
 
     if status == device["status"]:
         # No change in status, no need for update
         return        
     else:
         # Update status
+        print(device["deviceId"], "status updated to", status)
         return smart_campus_update(device["_id"], status)
 
 
@@ -142,12 +147,13 @@ def main():
     # Verify test_sensor
     if test_sensor:
         if test_sensor not in valid:
-            raise RuntimeError("Unknown sensor id value given to test device")
+            raise RuntimeError("Unknown sensor id value given as test device")
 
     for device in device_info:
         if device["deviceId"] in valid:
             # Ignore if device is not installed
             if device["status"] == "maintenance":
+                print(device["deviceId"], "in maintenance")
                 continue
             elif device["status"] == "planned":
                 continue
@@ -162,7 +168,7 @@ def main():
                 status(device, seen)
         
         else:
-            # Unknown sensor ID value
+            print("Unknown DevEUI", device["deviceId"])
             pass
 
 
