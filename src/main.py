@@ -146,11 +146,21 @@ def main():
 
     # Verify test_sensor
     if test_sensor:
+        print("\nTest sensor recognized {}\n".format(test_sensor))
+        warnings.warn("Script will only test the functionality of the given test sensor.")
         if test_sensor not in valid:
             raise RuntimeError("Unknown sensor id value given as test device")
 
     for device in device_info:
-        if device["deviceId"] in valid:
+
+        if test_sensor:
+                # Update only one sensor for testing-
+                # purposes, if one is set in the settings
+                if device["deviceId"] == test_sensor:
+                    status(device, seen)
+                    break
+
+        elif device["deviceId"] in valid:
             # Ignore if device is not installed
             if device["status"] == "maintenance":
                 print(device["deviceId"], "in maintenance")
@@ -158,12 +168,6 @@ def main():
             elif device["status"] == "planned":
                 continue
 
-            elif test_sensor:
-                # Update only one sensor for testing
-                # purposes, if one is set in the settings
-                if device["deviceId"] == test_sensor:
-                    status(device, seen)
-                    break
             else:
                 status(device, seen)
         
